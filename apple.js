@@ -7,7 +7,7 @@ function Apple(snake) {
             this.x = Math.floor(27 * Math.random()) * 20;
             this.y = Math.floor(27 * Math.random()) * 20;
         }
-        this.square = new Square(this.x, this.y, 255, 255, 255);
+        this.square = new Square(this.x, this.y, 255, 0, 0);
     }
 
     this.new = function() {
