@@ -1,10 +1,12 @@
 var direction = 0;
 var snake;
 var apple;
+var colors;
 
 function setup() {
+    colors = Object.values(colors);
     createCanvas(540, 540); 
-    snake = new Snake();
+    snake = new Snake(colors);
     apple = new Apple(snake);
     snake.start();
     apple.start();
@@ -14,7 +16,7 @@ function draw() {
     background(0);
     snake.show();
     apple.square.show();
-    if(frameCount % 5 == 0) {
+    if(frameCount % snake.period == 0) {
         if(Math.abs(direction - snake.direction) != 2) {
             snake.update(direction);
         } else {

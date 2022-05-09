@@ -1,11 +1,11 @@
-function Snake() {
+function Snake(colors) {
     this.direction;
     this.squares = [];
-    this.begin;
+    this.size = 5;
+    this.begin = this.size;
     this.score;
-    this.red = 0;
-    this.green = 255;
-    this.blue = 255;
+    this.colors = colors;
+    this.period = 3;
 
     this.show = function() {
         for(i = 0; i < this.squares.length; i++) {
@@ -27,7 +27,8 @@ function Snake() {
         this.begin = 5;
         this.score = 0;
         for(i = 0; i < this.begin; i++) {
-            let square = new Square(260 + 20 * i, 260, this.red, this.green, this.blue);
+            let color = this.colors[Math.floor(Math.random() * this.colors.length)];
+            let square = new Square(260 + 20 * i, 260, color[0], color[1], color[2]);
             this.squares.push(square);
         }
     }
@@ -44,7 +45,8 @@ function Snake() {
     this.grow = function() {
         let x = 2 * this.squares[this.squares.length - 1].x - this.squares[this.squares.length - 2].x;
         let y = 2 * this.squares[this.squares.length - 1].y - this.squares[this.squares.length - 2].y;
-        let square = new Square(x, y, this.red, this.green, this.blue);
+        let color = this.colors[Math.floor(Math.random() * this.colors.length)];
+        let square = new Square(x, y, color[0], color[1], color[2]);
         this.squares.push(square);
     }
 

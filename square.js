@@ -5,8 +5,6 @@ function Square(x, y, r, g, b) {
     this.l = this.w;
     this.direction = 0;
 
-    this.period = 5;
-
     this.show = function() {
         fill(r, g, b);
         rect(this.x, this.y, this.w, this.l);
