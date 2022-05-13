@@ -8,8 +8,6 @@ function setup() {
     createCanvas(540, 540); 
     snake = new Snake(colors);
     apple = new Apple(snake);
-    snake.start();
-    apple.start();
 }
 
 function draw() {

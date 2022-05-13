@@ -1,16 +1,20 @@
-function Square(x, y, r, g, b) {
-    this.x = x;
-    this.y = y;
-    this.w = 20;
-    this.l = this.w;
-    this.direction = 0;
+class Square {
+    constructor(x, y, r, g, b) {
+        this.x = x;
+        this.y = y;
+        this.w = 20;
+        this.l = this.w;
+        this.r = r;
+        this.g = g;
+        this.b = b
+    }
 
-    this.show = function() {
-        fill(r, g, b);
+    show() {
+        fill(this.r, this.g, this.b);
         rect(this.x, this.y, this.w, this.l);
     }
 
-    this.update = function(dir) {
+    update(dir) {
         switch(dir) {
             case 0: //left
                 this.x -= this.w;

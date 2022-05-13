@@ -1,16 +1,18 @@
-function Apple(snake) {
-    this.x = Math.floor(27 * Math.random()) * 20;
-    this.y = Math.floor(27 * Math.random()) * 20;
+class Apple {
+    constructor(snake) {
+        this.snake = snake;
+        this.start();
+    }
     
-    this.start = function() {
-        while(this.eaten()) {
+    start() {
+        do {
             this.x = Math.floor(27 * Math.random()) * 20;
             this.y = Math.floor(27 * Math.random()) * 20;
-        }
+        } while (this.eaten());
         this.square = new Square(this.x, this.y, 255, 0, 0);
     }
 
-    this.new = function() {
+    new() {
         do {
             this.x = Math.floor(27 * Math.random()) * 20;
             this.y = Math.floor(27 * Math.random()) * 20;
@@ -19,12 +21,7 @@ function Apple(snake) {
         this.square.y = this.y;
     }
 
-    this.eaten = function() {
-        for(i = 0; i < snake.squares.length; i++) {
-            if(this.x == snake.squares[i].x && this.y == snake.squares[i].y) {
-                return true;
-            }
-        }
-        return false;
+    eaten() {
+        return this.x == this.snake.squares[0].x && this.y == this.snake.squares[0].y;
     }
 }
