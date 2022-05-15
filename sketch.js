@@ -6,7 +6,6 @@ function setup() {
     createCanvas(540, 540); 
     snake = new Snake();
     apple = new Apple(snake);
-    snake.start();
     apple.start();
 }
 
