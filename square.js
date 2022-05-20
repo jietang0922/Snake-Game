@@ -6,7 +6,7 @@ class Square {
         this.l = this.w;
         this.r = r;
         this.g = g;
-        this.b = b
+        this.b = b;
     }
 
     show() {
