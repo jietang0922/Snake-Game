@@ -1,11 +1,11 @@
 class Snake {
-    constructor(colors) {
+    constructor(skins) {
         this.direction = 0; //default left
         this.squares = [];
         this.size = 5;
         this.begin = this.size;
         this.score;
-        this.colors = colors;
+        this.skins = skins;
         this.period = 5;
         this.start();
     }

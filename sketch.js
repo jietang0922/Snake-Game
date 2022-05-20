@@ -4,9 +4,9 @@ var apple;
 var colors;
 
 function setup() {
-    colors = Object.values(colors);
+    skins = Object.values(skins);
     createCanvas(540, 540); 
-    snake = new Snake(colors);
+    snake = new Snake(skins);
     apple = new Apple(snake);
 }
 
