@@ -2,11 +2,25 @@ var direction = 0;
 var snake;
 var apple;
 var colors;
+var skins;
+var skin;
 
 function setup() {
-    skins = Object.values(skins);
+    skins = skins;
+    skin = null;
+    while(true) {
+        skin = prompt("Choose a Skin!\n    1) Random\n    2) American\n    3) Christmas");
+        
+        if(parseInt(skin) <= 0 || parseInt(skin) > skins.length) {
+            skin = null;
+            alert("That's not an option!");
+        } else if(isNaN(parseInt(skin)) && skin != null) alert("Please enter a number.");
+        else break;
+        
+    }
+    
     createCanvas(540, 540); 
-    snake = new Snake(skins);
+    snake = new Snake(skins, parseInt(skin));
     apple = new Apple(snake);
 }
 
