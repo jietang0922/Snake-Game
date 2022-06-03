@@ -5,15 +5,18 @@ import java.util.ArrayList;
 public class Snake {
 
     private int direction;
+    private boolean canChangeDirection;
     private ArrayList<Square> squares;
 
     public Snake() {
         this.direction = 0;
+        this.canChangeDirection = false;
         this.squares = new ArrayList<>();
         this.start();
     }
 
     public void start() {
+        this.direction = 0;
         int x = Constants.WINDOW_SIZE / 2;
         for(int i = 0; i < 5; i++) {
             this.squares.add(new Square(x, Constants.WINDOW_SIZE / 2, 0, 255, 255));
@@ -21,8 +24,16 @@ public class Snake {
         }
     }
 
+    public void reset() {
+        this.squares.clear();
+        this.start();
+    }
+
     public void changeDirection(int direction) {
-        this.direction = (direction + this.direction) % 2 == 0 ? this.direction : direction;
+        if(this.canChangeDirection && this.direction != direction) {
+            this.direction = (direction + this.direction) % 2 == 0 ? this.direction : direction;
+            this.canChangeDirection = false;
+        }
     }
 
     public void update() {
@@ -45,6 +56,14 @@ public class Snake {
                 lead.setY((lead.getY() + Constants.SNAKE_SIZE + Constants.WINDOW_SIZE) % Constants.WINDOW_SIZE);
                 break;
         }
+        this.canChangeDirection = true;
+    }
+
+    public boolean collision() {
+        for(int i = 4; i < this.squares.size(); i++) {
+            if(this.squares.get(0).equals(this.squares.get(i))) return true;
+        }
+        return false;
     }
 
     public void grow() {

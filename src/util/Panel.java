@@ -4,47 +4,37 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
-import javax.swing.SwingWorker;
 
 public class Panel extends JPanel {
 
     private Snake snake;
     private Apple apple;
-    private SwingWorker<Object, Object> sw;
 
     public Panel() {
-
         this.snake = new Snake();
         this.apple = new Apple(this.snake.getSquares());
-
-        this.sw = new SwingWorker<Object, Object>() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                while (true) {
-                    update();
-                    Thread.sleep(1000 / Constants.FRAME_RATE);
-                }
-            }
-        };
     }
 
     public void changeDirection(int direction) {
         this.snake.changeDirection(direction);
     }
 
-    public void update() {
+    public boolean update() {
         this.snake.update();
         if(this.snake.getSquares().get(0).equals(this.apple)) {
             this.snake.grow();
             this.apple.generate(this.snake.getSquares());
         }
+        if(this.snake.collision()) {
+            this.snake.reset();
+            return false;
+        }
         this.revalidate();
         this.repaint();
+        return true;
     }
 
-    public void run() {
-        this.sw.execute();
-    }
+    
 
     public void paint(Graphics g) {
         super.paint(g);
