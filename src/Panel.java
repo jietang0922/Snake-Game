@@ -1,9 +1,14 @@
-package util;
+
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
+
+import components.Apple;
+import components.Snake;
+import util.Constants;
+import util.Square;
 
 public class Panel extends JPanel {
 
@@ -34,14 +39,20 @@ public class Panel extends JPanel {
         return true;
     }
 
-    
+    public void changeSkin(String name) {
+        this.snake.changeSkin(name);
+    }
+
+    public void reset() {
+        this.snake.reset();
+    }
 
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(new Color(255, 0, 0));
         g.fillRect(this.apple.getX(), this.apple.getY(), Constants.SNAKE_SIZE, Constants.SNAKE_SIZE);
         for(Square square : this.snake.getSquares()) {
-            g.setColor(new Color(0, 255, 255));
+            g.setColor(square.getColor());
             g.fillRect(square.getX(), square.getY(), Constants.SNAKE_SIZE, Constants.SNAKE_SIZE);
         }
     }

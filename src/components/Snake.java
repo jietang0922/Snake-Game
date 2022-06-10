@@ -1,15 +1,27 @@
-package util;
+package components;
+
+import java.awt.Color;
 
 import java.util.ArrayList;
+
+import util.Constants;
+import util.JSONReader;
+import util.Square;
 
 public class Snake {
 
     private int direction;
+    private ArrayList<Color> colors;
+    private String skin;
+    private int colorIndex;
     private boolean canChangeDirection;
     private ArrayList<Square> squares;
 
     public Snake() {
         this.direction = 0;
+        this.colorIndex = 0;
+        this.skin = "default";
+        this.colors = new ArrayList<>();
         this.canChangeDirection = false;
         this.squares = new ArrayList<>();
         this.start();
@@ -17,10 +29,14 @@ public class Snake {
 
     public void start() {
         this.direction = 0;
+        this.colorIndex = 0;
+        this.colors = JSONReader.getSkin("default");
         int x = Constants.WINDOW_SIZE / 2;
-        for(int i = 0; i < 5; i++) {
-            this.squares.add(new Square(x, Constants.WINDOW_SIZE / 2, 0, 255, 255));
+        Color color = this.colors.get(this.colorIndex);
+        for (int i = 0; i < Constants.INITIAL_SNAKE_LENGTH; i++) {
+            this.squares.add(new Square(x, Constants.WINDOW_SIZE / 2, this.colors.get(this.colorIndex)));
             x += Constants.SNAKE_SIZE;
+            this.colorIndex = (this.colorIndex + 1) % this.colors.size();
         }
     }
 
@@ -30,14 +46,27 @@ public class Snake {
     }
 
     public void changeDirection(int direction) {
-        if(this.canChangeDirection && this.direction != direction) {
+        if (this.canChangeDirection && this.direction != direction) {
             this.direction = (direction + this.direction) % 2 == 0 ? this.direction : direction;
             this.canChangeDirection = false;
         }
     }
 
+    public void changeSkin(String name) {
+        if (!name.equals(this.skin)) {
+            this.skin = name;
+            this.colors = JSONReader.getSkin(name);
+            this.colorIndex = 0;
+            for (Square square : this.squares) {
+                Color color = this.colors.get(this.colorIndex);
+                square.setColor(color);
+                this.colorIndex = (this.colorIndex + 1) % this.colors.size();
+            }
+        }
+    }
+
     public void update() {
-        for(int i = this.squares.size() - 1; i >= 1; i--) {
+        for (int i = this.squares.size() - 1; i >= 1; i--) {
             this.squares.get(i).setX(this.squares.get(i - 1).getX());
             this.squares.get(i).setY(this.squares.get(i - 1).getY());
         }
@@ -60,8 +89,9 @@ public class Snake {
     }
 
     public boolean collision() {
-        for(int i = 4; i < this.squares.size(); i++) {
-            if(this.squares.get(0).equals(this.squares.get(i))) return true;
+        for (int i = 4; i < this.squares.size(); i++) {
+            if (this.squares.get(0).equals(this.squares.get(i)))
+                return true;
         }
         return false;
     }
@@ -69,7 +99,8 @@ public class Snake {
     public void grow() {
         int x = 2 * this.squares.get(this.squares.size() - 1).getX() - this.squares.get(this.squares.size() - 2).getX();
         int y = 2 * this.squares.get(this.squares.size() - 1).getY() - this.squares.get(this.squares.size() - 2).getY();
-        this.squares.add(new Square(x, y, 0, 255, 255));
+        this.squares.add(new Square(x, y, this.colors.get(this.colorIndex)));
+        this.colorIndex = (this.colorIndex + 1) % this.colors.size();
     }
 
     public ArrayList<Square> getSquares() {

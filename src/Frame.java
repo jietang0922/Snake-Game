@@ -1,10 +1,12 @@
-package util;
-
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
-import javax.swing.plaf.synth.SynthSeparatorUI;
+
+import org.json.simple.JSONArray;
+
+import util.Constants;
+import util.JSONReader;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -17,18 +19,7 @@ public class Frame extends JFrame implements KeyListener {
     private JDialog dialog;
     private boolean ultimateWeapon;
     private String[] options = { "Restart", "Quit" };
-    private String[] secretMessages = {
-            "Choose an option",
-            "Please, just choose an option",
-            "Please don't be annoying",
-            "Stop being annoying",
-            "Don't make me do this",
-            "You're pushing it",
-            "Alright you're done",
-            "Now you can't even close it",
-            "Funny",
-            "Now you can't do that either"
-    };
+    private String[] secretMessages;
     private SwingWorker<Object, Object> sw;
 
     public Frame(String title) {
@@ -42,9 +33,12 @@ public class Frame extends JFrame implements KeyListener {
 
         this.panel = new Panel();
         this.add(this.panel);
-        this.pane = new JOptionPane(this.endMessage, JOptionPane.INFORMATION_MESSAGE, JOptionPane.YES_NO_OPTION, null, this.options, null);
+        this.pane = new JOptionPane(this.endMessage, JOptionPane.INFORMATION_MESSAGE, JOptionPane.YES_NO_OPTION, null,
+                this.options, null);
         this.dialog = pane.createDialog("GAME OVER");
         this.dialog.setFocusable(true);
+
+        this.secretMessages = JSONReader.getMessages();
 
         this.sw = new SwingWorker<Object, Object>() {
             @Override
@@ -64,7 +58,7 @@ public class Frame extends JFrame implements KeyListener {
     }
 
     public void end(String message, int annoyCount) {
-        if(this.ultimateWeapon) {
+        if (this.ultimateWeapon) {
             this.dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         }
 
@@ -74,7 +68,7 @@ public class Frame extends JFrame implements KeyListener {
         Object selectedValue = pane.getValue();
         Integer choice = null;
 
-        // ADAPTED FROM JOptionPane CODE
+        // ADOPTED FROM JOptionPane CODE
         for (int counter = 0, maxCounter = this.options.length; counter < maxCounter; counter++) {
             if (options[counter].equals(selectedValue)) {
                 choice = counter;
@@ -82,38 +76,40 @@ public class Frame extends JFrame implements KeyListener {
             }
         }
 
-        System.out.println(choice);
-
         if (choice == null) {
-            System.out.println("CLOSED " + annoyCount);
-            if(annoyCount > 6) this.ultimateWeapon = true;
-            if(annoyCount > 8) {
+            if (annoyCount > 6)
+                this.ultimateWeapon = true;
+            if (annoyCount > 8) {
                 this.dialog.addKeyListener(new KeyListener() {
                     @Override
                     public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == 27) e.consume();
+                        if (e.getKeyCode() == 27)
+                            e.consume();
                     }
+
                     @Override
                     public void keyTyped(KeyEvent e) {
                         // TODO Auto-generated method stub
                     }
+
                     @Override
                     public void keyReleased(KeyEvent e) {
                         // TODO Auto-generated method stub
                     }
-               });
+                });
             }
             this.end(this.secretMessages[annoyCount], annoyCount + 1);
         } else if (choice == 1)
-            this.dispose();
+            System.exit(0);
 
         this.ultimateWeapon = false;
         this.setFocusable(true);
     }
 
     public void update() {
-        if (!this.panel.update())
+        if (!this.panel.update()) {
             this.end(this.endMessage, 0);
+        }
     }
 
     // From KeyListener
@@ -125,8 +121,20 @@ public class Frame extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        if (key == 27) System.exit(0); 
-        else if (key >= 37 && key <= 40) this.panel.changeDirection(key - 37);
+        if (key == 27)
+            System.exit(0); // Esc
+        else if (key >= 37 && key <= 40)
+            this.panel.changeDirection(key - 37); // Arrow Keys
+        else if (key == 82)
+            this.panel.changeSkin("rainbow"); // r
+        else if (key == 65)
+            this.panel.changeSkin("american"); // a
+        else if (key == 67)
+            this.panel.changeSkin("christmas"); // c
+        else if (key == 68)
+            this.panel.changeSkin("default"); // d
+        else if (key == 32) 
+            this.panel.reset(); // Space
     }
 
     @Override

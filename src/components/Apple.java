@@ -1,6 +1,9 @@
-package util;
+package components;
 
 import java.util.ArrayList;
+
+import util.Constants;
+import util.Square;
 
 public class Apple extends Square {
 

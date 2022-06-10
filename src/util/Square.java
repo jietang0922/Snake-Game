@@ -10,10 +10,10 @@ public class Square {
         
     }
 
-    public Square(int x, int y, int r, int g, int b) {
+    public Square(int x, int y, Color color) {
         this.x = x;
         this.y = y;
-        this.color = new Color(r, g, b);
+        this.color = color;
     }
 
     public int getX() {
@@ -36,7 +36,11 @@ public class Square {
         return this.color;
     }
 
-    public boolean equals(Square other) {
-        return this.x == other.x && this.y == other.y;
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public boolean equals(Object other) {
+        return this.x == ((Square) other).getX() && this.y == ((Square) other).getY();
     }
 }
